@@ -4,7 +4,39 @@
 
 腾讯地图 + 逐日卡片 + 直线示意/真实导航双视图，一个 HTML 文件、离线可开。这是给 AI Agent 用的 **Skill**（技能包），也可以直接当模板手改。
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue)
+![Node 18+](https://img.shields.io/badge/Node-18%2B-green)
+
 ![预览](docs/preview.png)
+
+## 一键安装
+
+**方式一 · 装成 Skill（推荐）**
+
+装好后直接对 Agent 说"想去 XX 玩 N 天"，它会走完整流程：问需求 → 给路线骨架 → 拉逐日表 → 采坐标取路 → 出图 → 体检 → 交付。
+
+```bash
+# 下载并解压到 skills 目录（.skill 本质是 zip）
+mkdir -p ~/.workbuddy/skills && cd ~/.workbuddy/skills
+curl -L -o travel-itinerary-map.skill \
+  https://github.com/ch-0204/travel-itinerary-map/releases/latest/download/travel-itinerary-map.skill
+unzip -o travel-itinerary-map.skill -d .
+```
+
+> 没有 `unzip`？Windows 上把后缀改成 `.zip` 双击解压，或直接用 PowerShell 的 `Expand-Archive`。
+
+**方式二 · 当模板用**
+
+不装 skill，只想拿一份能改的模板：
+
+```bash
+git clone https://github.com/ch-0204/travel-itinerary-map.git
+cd travel-itinerary-map
+python scripts/build_trip_map.py assets/trip-data.example.json -o out.html
+```
+
+打开 `out.html` 就是一个完整的广西 7 日行程图；改 `assets/trip-data.example.json` 里的内容，重跑就换成你的行程。
 
 ---
 
@@ -72,9 +104,19 @@ evals/evals.json              3 条真实场景测试用例
 
 更多见 [`references/map-gotchas.md`](references/map-gotchas.md)。
 
-## 作为 Agent Skill 使用
+## 作为 Agent Skill 的流程
 
-把本目录放进 `~/.workbuddy/skills/` 后，对 Agent 说"想去 XX 玩 N 天"，它会走这套流程：问清需求 → 给 2–3 个路线骨架 → 拉逐日表 → 采集坐标取路 → 出图 → 体检 → 交付。
+装好（见顶部[一键安装](#一键安装)）之后，一次完整的对话大概是这样：
+
+```
+你：想 10 月去云南玩 8 天，昆明进丽江出，带父母慢一点
+ ↓ 问清：出行方式 / 节奏强度 / 必去与可舍 / 住宿偏好
+ ↓ 给 2–3 个路线骨架（环线 or 单程，含里程和每日驾车时长）← 你挑一个
+ ↓ 拉逐日时间表，逐条确认每一行
+ ↓ 采集 POI 坐标（GCJ-02）→ 取真实路网 → 写 trip-data.json
+ ↓ 出图 + 里程对账 + 体检截图
+产出：一份 8 天行程图 HTML
+```
 
 ## 已知限制
 
