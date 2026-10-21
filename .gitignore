@@ -1,0 +1,21 @@
+# 生成物
+out.html
+*.skill
+shots/
+*.tmp.html
+
+# 取路的中间产物
+legs*.json
+nav*.json
+!assets/trip-data.example.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
